@@ -10,4 +10,6 @@ def test_search():
       {'id': 'doc3', 'text': doc3},
     ]    
     assert search(docs, 'shoot') == ['doc1', 'doc2']
+    assert search(docs, 'pint') == ['doc1']
+    assert search(docs, 'pint!') == ['doc1']
     assert search([], 'shoot') == []
