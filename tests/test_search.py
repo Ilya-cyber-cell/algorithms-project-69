@@ -12,4 +12,5 @@ def test_search():
     assert search(docs, 'shoot') == ['doc2', 'doc1']
     assert search(docs, 'pint') == ['doc1']
     assert search(docs, 'pint!') == ['doc1']
+    assert search(docs, 'shoot at me') == ['doc2', 'doc1']
     assert search([], 'shoot') == []
