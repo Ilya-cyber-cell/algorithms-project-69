@@ -8,7 +8,7 @@ def test_search():
       {'id': 'doc1', 'text': doc1},
       {'id': 'doc2', 'text': doc2},
       {'id': 'doc3', 'text': doc3},
-    ]    
+    ]
     assert search(docs, 'shoot') == ['doc2', 'doc1']
     assert search(docs, 'pint') == ['doc1']
     assert search(docs, 'pint!') == ['doc1']

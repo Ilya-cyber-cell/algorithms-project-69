@@ -27,47 +27,28 @@ def quickSort(items, key,direction='asc'):
         return [*sorted_smaller_items, element, *sorted_bigger_items]
     return [*sorted_bigger_items, element, *sorted_smaller_items]
 
+def get_index(docs):
+    index = {}
+    for doc in docs:
+        for token in doc['text'].split():
+            term = re.findall(r'\w+', token)
+            index_key = ''.join(term).lower()
+            if index_key not in index:
+                index[index_key] = []
+            index[index_key].append(doc['id'])
+
+
+    return index
 
 def search(docs:dict, search_pattern:str):
-    search_results = []
     keys = []
+    index = get_index(docs)
     search_worlds = search_pattern.split()
     for i, search_world in enumerate(search_worlds):
         term = re.findall(r'\w+', search_world)
-        search_worlds[i] = ''.join(term).lower()
-
-    for doc in docs:
-        relevance = 0
-        word_matches = 0
-        for search_world in search_worlds:
-            word_matched = False
-            for token in doc['text'].split():
-                term = re.findall(r'\w+', token)
-                result = ''.join(term).lower()
-                if result == search_world:
-                    relevance += 1
-                    word_matched =True
-            if word_matched:
-                word_matches = +1
-        if relevance > 0:
-            search_results.append({'key': doc['id'], 'relevance': relevance, 'word_matches': word_matches})
-    if len(search_results) > 0:
-        search_results = quickSort(search_results, 'word_matches', 'desc')
-        old_nuber = search_results[0]['word_matches']
-        temp_dict = []
-        for result in search_results:
-            if result['word_matches'] != old_nuber:
-                temp_dict = quickSort(temp_dict, 'relevance', 'desc')
-                for tem_result in temp_dict:
-                     keys.append(tem_result['key'])
-                temp_dict = [result]
-                old_nuber = result['word_matches']
-            else:
-                temp_dict.append(result)
-        if len(temp_dict) > 0:
-            temp_dict = quickSort(temp_dict, 'relevance', 'desc')
-            for tem_result in temp_dict:
-                keys.append(tem_result['key'])
-#    for result in search_results:
-#        keys.append(result['key'])
+        search_world_lower = ''.join(term).lower()
+        if search_world_lower in index:
+            for doc in index[search_world_lower]:
+                if doc not in keys:
+                    keys.append(doc)
     return keys
