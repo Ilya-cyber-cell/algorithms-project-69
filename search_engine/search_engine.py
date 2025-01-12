@@ -1,6 +1,7 @@
 import re
 import math
 
+
 def compare_by_if_idf(item1, item2):
     if item1['TFIDF'] < item2['TFIDF']:
         return -1
@@ -9,7 +10,8 @@ def compare_by_if_idf(item1, item2):
     else:
         return 1
 
-def quickSort(items, comparator,direction='asc'):
+
+def quickSort(items, comparator, direction='asc'):
     items_length = len(items)
 
     if items_length == 0:
@@ -51,19 +53,20 @@ def get_index(docs):
             number_words += 1
         for key, TF in temp_dict.items():
             if key not in index:
-                index[key] = [{'id': doc['id'], 'TF': TF/number_words }]
+                index[key] = [{'id': doc['id'], 'TF': TF / number_words}]
             else:
-                index[key].append({'id': doc['id'], 'TF': TF/number_words })
+                index[key].append({'id': doc['id'], 'TF': TF / number_words})
     for key, list_doc in index.items():
         docs_with_term = len(list_doc)
 #        IDF = math.log10( docs_count / docs_with_term )
-#Math.log2(1 + (docsCount - termCount + 1) / (termCount + 0.5));
-#docsCount - общее количество документов termCount - количество документов, в которых встречается искомое слово
-#Это несколько "сглаженный" вариант основной формулы
-        IDF = math.log2(1 + (docs_count - docs_with_term + 1 ) / (docs_with_term + 0.5))
+# Math.log2(1 + (docsCount - termCount + 1) / (termCount + 0.5));
+# docsCount - общее количество документов termCount - количество документов, в которых встречается искомое слово
+# Это несколько "сглаженный" вариант основной формулы
+        IDF = math.log2(1 + (docs_count - docs_with_term + 1) / (docs_with_term + 0.5))
         for doc in list_doc:
             doc['TFIDF'] = doc['TF'] * IDF
     return index
+
 
 def search(docs:dict, search_pattern:str):
     keys = []
@@ -81,8 +84,10 @@ def search(docs:dict, search_pattern:str):
                     search_results[doc['id']] += doc['TFIDF']
     search_results_list = []
     for doc, TFIDF in search_results.items():
-        search_results_list.append({'id': doc, 'TFIDF': TFIDF })
-    search_results = quickSort(search_results_list, compare_by_if_idf, 'desc')
+        search_results_list.append({'id': doc, 'TFIDF': TFIDF})
+    search_results = quickSort(search_results_list,
+                               compare_by_if_idf,
+                               'desc')
     print(search_results)
     for result in search_results:
         keys.append(result['id'])
