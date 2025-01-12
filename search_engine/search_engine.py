@@ -65,8 +65,9 @@ def get_index(docs):
 # docsCount - общее количество документов
 # termCount - количество документов, в которых встречается искомое слово
 # Это несколько "сглаженный" вариант основной формулы
-        IDF = math.log2(1 + (docs_count - docs_with_term 
-                             + 1) / (docs_with_term + 0.5))
+# линтер требует одновременно соблюдать W503 и W504
+        part_idf = (docs_count - docs_with_term + 1) / (docs_with_term + 0.5)
+        IDF = math.log2(1 + part_idf)
         for doc in list_doc:
             doc['TFIDF'] = doc['TF'] * IDF
     return index
