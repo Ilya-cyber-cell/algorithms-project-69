@@ -60,7 +60,7 @@ def get_index(docs):
 #Math.log2(1 + (docsCount - termCount + 1) / (termCount + 0.5));
 #docsCount - общее количество документов termCount - количество документов, в которых встречается искомое слово
 #Это несколько "сглаженный" вариант основной формулы
-        IDF = math.log2(1 + (docs_count - docs_with_term) / (docs_with_term + 0.5))
+        IDF = math.log2(1 + (docs_count - docs_with_term + 1 ) / (docs_with_term + 0.5))
         for doc in list_doc:
             doc['TFIDF'] = doc['TF'] * IDF
     return index
@@ -83,6 +83,7 @@ def search(docs:dict, search_pattern:str):
     for doc, TFIDF in search_results.items():
         search_results_list.append({'id': doc, 'TFIDF': TFIDF })
     search_results = quickSort(search_results_list, compare_by_if_idf, 'desc')
+    print(search_results)
     for result in search_results:
         keys.append(result['id'])
     return keys
