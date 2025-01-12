@@ -23,8 +23,9 @@ def quickSort(items, comparator, direction='asc'):
     smaller_items = [
         items[i]
         for i in range(items_length)
-            if comparator(items[i], element) < 0 and i != index
+        if comparator(items[i], element) < 0 and i != index
     ]
+
     bigger_items = [
         items[i]
         for i in range(items_length)
@@ -37,6 +38,7 @@ def quickSort(items, comparator, direction='asc'):
     if direction == 'asc':
         return [*sorted_smaller_items, element, *sorted_bigger_items]
     return [*sorted_bigger_items, element, *sorted_smaller_items]
+
 
 def get_index(docs):
     index = {}
@@ -60,15 +62,17 @@ def get_index(docs):
         docs_with_term = len(list_doc)
 #        IDF = math.log10( docs_count / docs_with_term )
 # Math.log2(1 + (docsCount - termCount + 1) / (termCount + 0.5));
-# docsCount - общее количество документов termCount - количество документов, в которых встречается искомое слово
+# docsCount - общее количество документов 
+# termCount - количество документов, в которых встречается искомое слово
 # Это несколько "сглаженный" вариант основной формулы
-        IDF = math.log2(1 + (docs_count - docs_with_term + 1) / (docs_with_term + 0.5))
+        IDF = math.log2(1 + (docs_count - \
+                             docs_with_term + 1) / (docs_with_term + 0.5))
         for doc in list_doc:
             doc['TFIDF'] = doc['TF'] * IDF
     return index
 
 
-def search(docs:dict, search_pattern:str):
+def search(docs: dict, search_pattern: str):
     keys = []
     index = get_index(docs)
     search_results = {}
